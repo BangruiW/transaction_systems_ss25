@@ -1,0 +1,69 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, tikz}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\title{Assignment 1}
+\author{Bangrui Wu}
+
+\begin{document}
+
+\maketitle
+
+\section*{Question 1}
+
+{Proof that \( \mathcal{R} = \{(A, B)\mid A \supseteq B\} \subseteq \mathcal{P}(S) \times \mathcal{P}(S) \) is a partial order}
+
+We prove that \( \mathcal{R} \) is a partial order by verifying that it satisfies reflexivity, antisymmetry, and transitivity.
+
+\subsection*{1. reflexivity}
+
+For any \( A \in \mathcal{P}(S) \), clearly \( A \supseteq A \) since every set contains itself.
+Therefore, \( (A, A) \in \mathcal{R} \), and so \( \mathcal{R} \) is reflexive.
+
+\subsection*{2. antisymmetry}
+Suppose \( (A, B) \in \mathcal{R} \) and \( (B, A) \in \mathcal{R} \).
+This means \( A \supseteq B \) and \( B \supseteq A\).
+This means they are equal.
+Therefore, \( A = B \), and \( \mathcal{R} \) is antisymmetric.
+
+\subsection*{3. Transitivity}
+
+Suppose \( (A, B) \in \mathcal{R} \) and \( (B, C) \in \mathcal{R} \).  
+Then \( A \supseteq B \) and \( B \supseteq C \).  
+By transitivity of the superset relation, \( A \supseteq C \), so \( (A, C) \in \mathcal{R} \).  
+Therefore, \( \mathcal{R} \) is transitive.
+
+\subsection*{Conclusion}
+
+Since \( \mathcal{R} \) is reflexive, antisymmetric, and transitive, it follows that \( \mathcal{R} \) is a \textbf{partial order} on \( \mathcal{P}(S) \). \hfill \( \blacksquare \)
+
+\section*{Question 2}
+To run the program implemented in Python, follow the steps below.
+
+\subsection*{Prerequisites}
+You must have Python 3 installed on your system.
+\subsection*{Steps}
+\begin{verbatim}
+    git clone https://github.com/BangruiW/transaction_systems_ss25.git
+    cd transaction_systems_ss25/assignment_1
+    python3 serializability_checker.py
+\end{verbatim}
+The input should be a space-separated list of operations, for example:
+\begin{verbatim}
+    w 1 x r 2 x w 2 y r 3 y w 3 z r 1 z
+\end{verbatim}
+
+
+\section*{Question 3}
+
+Our algorithm constructs a \textbf{precedence graph} based on conflicting operations between transactions. According to serializability theory, a schedule is \textbf{conflict-serializable} if and only if this graph has \textbf{no cycles}. We apply the algorithm to a theoretical instance:
+\begin{center}
+\texttt{w 1 x \quad r 2 x \quad w 2 y \quad r 3 y \quad w 3 z \quad r 1 z}
+\end{center}
+The algorithm detects WR conflicts: $1 \rightarrow 2 \rightarrow 3 \rightarrow 1$, forming a cycle. Therefore, the algorithm returns \texttt{false}, providing that the history is not conflict-serializable. This matches the theoretical prediction and confirms the algorithm's correctness for this instance.
+
+\end{document}

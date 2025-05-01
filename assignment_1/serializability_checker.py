@@ -1,18 +1,21 @@
 from collections import defaultdict
 
-
+# Function to parse the history string into a list of operations
 def parse_history(history_str):
     tokens = history_str.strip().split()
     operations = []
     i = 0
     while i < len(tokens):
+        # 'r' or 'w'
         op = tokens[i]
+        # transaction id
         tid = int(tokens[i + 1])
         item = tokens[i + 2]
         operations.append((op, tid, item))
         i += 3
     return operations
 
+# Function to build the precedence graph
 def build_precedence_graph(operations):
     graph = defaultdict(set)
     transactions = set()
@@ -29,7 +32,8 @@ def build_precedence_graph(operations):
                         (op1 == 'w' and op2 == 'w'):
                             graph[tid1].add(tid2)     
     return graph, transactions
-    
+
+# Function to detect cycles using DFS
 def has_cycle(graph, transactions):
     visited = set()
     stack = set()

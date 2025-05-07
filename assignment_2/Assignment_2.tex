@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section*{Exercise 1 – Herbrand Semantics}
+
+Given the schedule:
+\[
+s = r_1[x] \; r_3[x] \; w_3[y] \; w_2[x] \; c_3 \; r_4[y] \; w_4[x] \; c_2 \; r_5[x] \; c_4 \; w_5[z] \; w_1[z] \; c_1 \; c_5
+\]
+
+We are told that transactions $t_3$ and $t_4$ are \textbf{copiers}, i.e., the write functions are identity functions on one of their inputs:
+\[
+f_{ix}(v_1, \dots, v_m) = v_j \quad \text{for some } j
+\]
+
+\subsection*{Step 1: Compute values of each write using Herbrand semantics}
+
+\begin{itemize}
+  \item $H_s[r_3[x]] = H_s[w_0[x]] = f_{0x}()$
+  \item $H_s[w_3[y]] = H_s[r_3[x]] = f_{0x}() \quad$ (copier)
+
+  \item $H_s[w_2[x]] = f_{2x}() \quad$ (no read in $t_2$)
+
+  \item $H_s[r_4[y]] = H_s[w_3[y]] = f_{0x}()$
+  \item $H_s[w_4[x]] = H_s[r_4[y]] = f_{0x}() \quad$ (copier)
+
+  \item $H_s[r_5[x]] = H_s[w_4[x]] = f_{0x}()$
+  \item $H_s[w_5[z]] = f_{5z}(H_s[r_5[x]]) = f_{5z}(f_{0x}())$
+
+  \item $H_s[r_1[x]] = f_{0x}()$
+  \item $H_s[w_1[z]] = f_{1z}(H_s[r_1[x]]) = f_{1z}(f_{0x}())$
+\end{itemize}
+
+\subsection*{Step 2: Final writes to each data item}
+
+The last writes in the schedule are:
+\begin{itemize}
+  \item $x$: last write is $w_4[x] \Rightarrow H[s](x) = H_s[w_4[x]] = f_{0x}()$
+  \item $y$: last write is $w_3[y] \Rightarrow H[s](y) = H_s[w_3[y]] = f_{0x}()$
+  \item $z$: last write is $w_1[z] \Rightarrow H[s](z) = H_s[w_1[z]] = f_{1z}(f_{0x}())$
+\end{itemize}
+
+\subsection*{Answer: Herbrand Semantics}
+
+\[
+\boxed{
+H[s](x) = f_{0x}(), \quad
+H[s](y) = f_{0x}(), \quad
+H[s](z) = f_{1z}(f_{0x}())
+}
+\]
+
+\end{document}
